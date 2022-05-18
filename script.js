@@ -2,13 +2,17 @@
 var latitud;
 var longitud;
 var limites = [];
+var limitesMark;
 var map;
 var pos;
+var posMarker;
 var tesoro;
+var tesoroMark;
 var distancia;
 var vibracion = 50;
 var frecuencia = 3000;
 var intervalo;
+var watch;
 var juegoIniciado = false;
 
 /**
@@ -25,7 +29,7 @@ function procesarPosicion(position) {
  */
 function iniciar(){
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(actualizarPosicion, fallo);
+       watch = navigator.geolocation.watchPosition(actualizarPosicion, fallo);
         map.panTo(pos);
         juegoIniciado = true;
         calcularLimites();
@@ -40,8 +44,28 @@ function iniciar(){
 */
 function reclamar(){
     document.getElementById('reclamar').style.display = "none";
-    document.getElementById('flex').style.display = "flex";
+    document.getElementById('iniciar').style.display = "flex";
+    resetearJuego();
+}
+
+function resetearJuego(){
+    latitud = undefined;
+    longitud = undefined;
+    limites = [];
+    tesoro = undefined;
+    distancia = undefined ;
+    vibracion = 50;
+    frecuencia = 3000;
     juegoIniciado = false;
+    clearInterval(intervalo);
+    navigator.geolocation.clearWatch(watch);
+    posMarker.setMap(null);
+    limitesMark.setMap(null);
+    tesoroMark.setMap(null);
+    document.getElementById("vibracion").innerHTML = `Vibración:`;
+    document.getElementById("frecuencia").innerHTML = `Frecuencia:`;
+    document.getElementById("distancia").innerHTML = `Distancia:`;
+
 }
 
 /**
@@ -52,7 +76,9 @@ function actualizarPosicion(position){
     latitud=position.coords.latitude;
     longitud=position.coords.longitude;
     pos =  new google.maps.LatLng(latitud,longitud);
-    new google.maps.Marker({
+    if(posMarker)
+        posMarker.setMap(null);
+    posMarker = new google.maps.Marker({
         position: pos,
         map: map,
       });
@@ -111,7 +137,7 @@ function generarTesoro(){
         limites.getSouthWest().lng() + lngSpan * Math.random(),
     )
     console.log(`LATITUD TESORO: ${tesoro.lat()}, LONGITUD: ${tesoro.lng()}`);
-    new google.maps.Marker({
+    tesoroMark = new google.maps.Marker({
         position: tesoro,
         map: map,
       });
@@ -121,7 +147,7 @@ function generarTesoro(){
  * Genera el rectangulo que delimita el terreno de juego
  */
 function generarArea(){   
-      new google.maps.Rectangle({
+    limitesMark = new google.maps.Rectangle({
       map: map,
       bounds: limites
       });
