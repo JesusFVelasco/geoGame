@@ -9,8 +9,8 @@ var posMarker;
 var tesoro;
 var tesoroMark;
 var distancia;
-var vibracion = 50;
-var frecuencia = 2000;
+var vibracion = 0;
+var frecuencia = 1500;
 var intervalo;
 var watch;
 var juegoIniciado = false;
@@ -162,18 +162,18 @@ function calcularDistancia(){
 
     if(distanciaB < distancia){
         
-        vibracion += 100;
-        if(frecuencia > 150)
-            frecuencia -= 100;
+        vibracion += 50;
+        if(frecuencia > 100)
+            frecuencia -= 50;
         document.getElementById("vibracion").innerHTML = `Vibración: ${vibracion}`;
         document.getElementById("frecuencia").innerHTML = `Frecuencia: ${frecuencia}`;
 
     }
     else if(distanciaB > distancia){
-        if(vibracion > 100)
-            vibracion -= 100;
+        if(vibracion > 50)
+            vibracion -= 50;
 
-        frecuencia += 100;
+        frecuencia += 50;
         document.getElementById("vibracion").innerHTML = `Vibración: ${vibracion}`;
         document.getElementById("frecuencia").innerHTML = `Frecuencia: ${frecuencia}`;
     }
@@ -182,8 +182,6 @@ function calcularDistancia(){
     document.getElementById("distancia").innerHTML = `Distancia: ${distancia}`;
 
     if(distancia < 5) document.getElementById('reclamar').style.display = "flex";
-
-    console.log("VIBRO", vibracion);
     console.log(`VIBRO: ${vibracion}, SONIDO: ${frecuencia}`);
 
     window.navigator.vibrate([200, 50]);
