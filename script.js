@@ -163,7 +163,7 @@ function calcularDistancia(){
     if(distanciaB < distancia){
         
         vibracion += 100;
-        if(frecuencia > 100)
+        if(frecuencia > 150)
             frecuencia -= 100;
         document.getElementById("vibracion").innerHTML = `Vibración: ${vibracion}`;
         document.getElementById("frecuencia").innerHTML = `Frecuencia: ${frecuencia}`;
@@ -186,7 +186,7 @@ function calcularDistancia(){
     console.log("VIBRO", vibracion);
     console.log(`VIBRO: ${vibracion}, SONIDO: ${frecuencia}`);
 
-    window.navigator.vibrate(vibracion);
+    window.navigator.vibrate([200, 50]);
     sonido();
 }
 
