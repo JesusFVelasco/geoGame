@@ -25,7 +25,8 @@ function procesarPosicion(position) {
  */
 function iniciar(){
     if (navigator.geolocation) {
-        var id=navigator.geolocation.watchPosition(actualizarPosicion, fallo);
+        navigator.geolocation.watchPosition(actualizarPosicion, fallo);
+        map.panTo(pos);
         juegoIniciado = true;
         calcularLimites();
         document.getElementById('iniciar').style.display = "none";
@@ -51,6 +52,11 @@ function actualizarPosicion(position){
     latitud=position.coords.latitude;
     longitud=position.coords.longitude;
     pos =  new google.maps.LatLng(latitud,longitud);
+    new google.maps.Marker({
+        position: pos,
+        map: map,
+      });
+
     console.log(`LATITUD: ${latitud}, LONGITUD: ${longitud}`);
     if(juegoIniciado)
         calcularDistancia();
@@ -131,13 +137,19 @@ function calcularDistancia(){
     if(distanciaB < distancia){
         vibracion += 100;
         frecuencia -= 500;
+        document.getElementById("vibracion").innerHTML = `Vibración: ${vibracion}`;
+        document.getElementById("frecuencia").innerHTML = `Frecuencia: ${frecuencia}`;
+
     }
     else if(distanciaB > distancia){
         vibracion -= 100;
         frecuencia += 500;
+        document.getElementById("vibracion").innerHTML = `Vibración: ${vibracion}`;
+        document.getElementById("frecuencia").innerHTML = `Frecuencia: ${frecuencia}`;
     }
     
     distancia = distanciaB;
+    document.getElementById("distancia").innerHTML = `Distancia: ${distancia}`;
 
     if(distancia < 5) document.getElementById('reclamar').style.display = "flex";
 
