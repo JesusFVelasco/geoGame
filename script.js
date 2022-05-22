@@ -190,13 +190,13 @@ function calcularDistancia(){
 
     if(distanciaB < 250){ 
         if(distanciaB < distancia){
-            vibracion += 50;
+            vibracion += 100;
             if(frecuencia > 100)
                 frecuencia -= 50;
         }
         else if(distanciaB > distancia){
-            if(vibracion > 55)
-                vibracion -= 50;
+            if(vibracion > 100)
+                vibracion -= 100;
 
             frecuencia += 50;
            
