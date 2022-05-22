@@ -14,6 +14,7 @@ var frecuencia = 1500;
 var intervalo;
 var watch;
 var juegoIniciado = false;
+var debug = false;
 
 /**
  * Calcula por primera vez la posición del jugador
@@ -22,6 +23,27 @@ var juegoIniciado = false;
 function procesarPosicion(position) {
     actualizarPosicion(position);
     map.panTo(pos);
+}
+
+/**
+ * Activa o desactiva el modo debug
+ * @param {*} event 
+ */
+function onChangeDebug(event){
+    debug = !debug;
+    actualizarLabels();
+    if(!debug){
+        document.getElementById("vibracion").innerHTML = ``;
+        document.getElementById("frecuencia").innerHTML = ``;
+    }
+}
+
+/**
+ * Actualiza el valor de las labels del modo debuf
+ */
+function actualizarLabels(){
+    document.getElementById("vibracion").innerHTML = `Vibración: ${vibracion}`;
+    document.getElementById("frecuencia").innerHTML = `Frecuencia: ${frecuencia}`;
 }
 
 /**
@@ -48,6 +70,9 @@ function reclamar(){
     resetearJuego();
 }
 
+/**
+ * Vuelve el juego al estado inicial para poder jugar una nueva partida
+ */
 function resetearJuego(){
     latitud = undefined;
     longitud = undefined;
@@ -62,8 +87,8 @@ function resetearJuego(){
     posMarker.setMap(null);
     limitesMark.setMap(null);
     tesoroMark.setMap(null);
-    document.getElementById("vibracion").innerHTML = `Vibración:`;
-    document.getElementById("frecuencia").innerHTML = `Frecuencia:`;
+    document.getElementById("vibracion").innerHTML = ``;
+    document.getElementById("frecuencia").innerHTML = ``;
     document.getElementById("distancia").innerHTML = `Distancia:`;
 
 }
@@ -153,6 +178,9 @@ function generarArea(){
       });
 }
 
+/**
+ * Calcula la distancia y actualiza los valores de vibracion y frecuencia
+ */
 function calcularDistancia(){
     var distanciaB;
     if(tesoro){
@@ -160,34 +188,34 @@ function calcularDistancia(){
         console.log("DISTANCIA: ", distancia);
     }
 
-    if(distanciaB < distancia){
-        
-        vibracion += 50;
-        if(frecuencia > 100)
-            frecuencia -= 50;
-        document.getElementById("vibracion").innerHTML = `Vibración: ${vibracion}`;
-        document.getElementById("frecuencia").innerHTML = `Frecuencia: ${frecuencia}`;
+    if(distanciaB < 250){ 
+        if(distanciaB < distancia){
+            vibracion += 50;
+            if(frecuencia > 100)
+                frecuencia -= 50;
+        }
+        else if(distanciaB > distancia){
+            if(vibracion > 55)
+                vibracion -= 50;
 
+            frecuencia += 50;
+           
+        }
+        actualizarLabels();
+        distancia = Math.round(distanciaB * 100) / 100;
+        document.getElementById("distancia").innerHTML = `Distancia: ${distancia}m`;
+
+        if(distancia < 5) document.getElementById('reclamar').style.display = "flex";
+        console.log(`VIBRO: ${vibracion}, SONIDO: ${frecuencia}`);
+
+        window.navigator.vibrate([vibracion, 50]);
+        sonido();
     }
-    else if(distanciaB > distancia){
-        if(vibracion > 50)
-            vibracion -= 50;
-
-        frecuencia += 50;
-        document.getElementById("vibracion").innerHTML = `Vibración: ${vibracion}`;
-        document.getElementById("frecuencia").innerHTML = `Frecuencia: ${frecuencia}`;
-    }
-    
-    distancia = distanciaB;
-    document.getElementById("distancia").innerHTML = `Distancia: ${distancia}`;
-
-    if(distancia < 5) document.getElementById('reclamar').style.display = "flex";
-    console.log(`VIBRO: ${vibracion}, SONIDO: ${frecuencia}`);
-
-    window.navigator.vibrate([200, 50]);
-    sonido();
 }
 
+/**
+ * Crea un intervalo con la frecuencia actual y reproducde un audio con el mismo
+ */
 function sonido(){
     clearInterval(intervalo);
     var audio = new Audio('./beep.wav');

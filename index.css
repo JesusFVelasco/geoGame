@@ -8,7 +8,7 @@ html, body {
   }
 
   #reclamar{
-    display: flex;
+    display: none;
   }
 
   label{

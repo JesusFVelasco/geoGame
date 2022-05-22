@@ -10,8 +10,9 @@
   <body>
       <section>
         <h1>Busca el tesoro</h1>
-        <label id="vibracion">Vibracion: </label>
-        <label id="frecuencia">Frecuencia: </label>
+        <label><input type="checkbox" id="debug" onclick='onChangeDebug(this);'>Modo debug</label>
+        <label id="vibracion"></label>
+        <label id="frecuencia"></label>
         <label id="distancia">Distancia: </label>
         <button id="iniciar" onclick="iniciar()">Comienza el juego</button>
         <button id="reclamar" onclick="reclamar()">Reclamar tesoro</button> 
