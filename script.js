@@ -185,6 +185,7 @@ function calcularDistancia(){
     var distanciaB;
     if(tesoro){
         distanciaB = google.maps.geometry.spherical.computeDistanceBetween(pos, tesoro);
+        distanciaB =  Math.round(distanciaB * 100) / 100
         console.log("DISTANCIA: ", distancia);
     }
 
@@ -202,7 +203,7 @@ function calcularDistancia(){
            
         }
         actualizarLabels();
-        distancia = Math.round(distanciaB * 100) / 100;
+        distancia =distanciaB;
         document.getElementById("distancia").innerHTML = `Distancia: ${distancia}m`;
 
         if(distancia < 5) document.getElementById('reclamar').style.display = "flex";
