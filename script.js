@@ -107,8 +107,6 @@ function actualizarPosicion(position){
         position: pos,
         map: map,
       });
-
-    console.log(`LATITUD: ${latitud}, LONGITUD: ${longitud}`);
     if(juegoIniciado)
         calcularDistancia();
 }
@@ -161,8 +159,7 @@ function generarTesoro(){
         limites.getSouthWest().lat() + latSpan * Math.random(),
         limites.getSouthWest().lng() + lngSpan * Math.random(),
     )
-    console.log(`LATITUD TESORO: ${tesoro.lat()}, LONGITUD: ${tesoro.lng()}`);
-    tesoroMark = new google.maps.Marker({
+        tesoroMark = new google.maps.Marker({
         position: tesoro,
         map: map,
       });
@@ -186,7 +183,6 @@ function calcularDistancia(){
     if(tesoro){
         distanciaB = google.maps.geometry.spherical.computeDistanceBetween(pos, tesoro);
         distanciaB =  Math.round(distanciaB * 100) / 100
-        console.log("DISTANCIA: ", distancia);
     }
 
     if(distanciaB < 250){ 
@@ -207,7 +203,6 @@ function calcularDistancia(){
         document.getElementById("distancia").innerHTML = `Distancia: ${distancia}m`;
 
         if(distancia < 5) document.getElementById('reclamar').style.display = "flex";
-        console.log(`VIBRO: ${vibracion}, SONIDO: ${frecuencia}`);
 
         window.navigator.vibrate([vibracion, 50]);
         sonido();
